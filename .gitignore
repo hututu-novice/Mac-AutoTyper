@@ -1,0 +1,11 @@
+.DS_Store
+.build/
+*.dSYM/
+Mac-AutoTyper.app/
+tests/*.actual.txt
+__pycache__/
+dist/
+.env
+.env.*
+!.env.example
+docs/TASKS.md
