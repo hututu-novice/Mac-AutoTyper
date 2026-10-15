@@ -1,0 +1,54 @@
+name: M-series macOS smoke test
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  arm64-app-launch:
+    name: M1 launch attempt ${{ matrix.attempt }}
+    runs-on: macos-26
+    strategy:
+      fail-fast: false
+      matrix:
+        attempt: [1, 2, 3, 4, 5]
+    steps:
+      - uses: actions/checkout@v6
+      - name: Run model tests
+        run: ./test.sh
+      - name: Build and package ARM64 app
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(uname -m)" = "arm64"
+          APP="$RUNNER_TEMP/Mac-AutoTyper.app"
+          mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
+          swiftc -O -target arm64-apple-macosx13.0 \
+            -o "$APP/Contents/MacOS/Mac-AutoTyper" \
+            src/*.swift -framework AppKit -framework ApplicationServices -framework Carbon
+          cp Info.plist "$APP/Contents/Info.plist"
+          cp resources/icon.icns "$APP/Contents/Resources/icon.icns"
+          printf 'APPL????' > "$APP/Contents/PkgInfo"
+          codesign --force --sign - "$APP"
+          codesign --verify --verbose=2 "$APP"
+          file "$APP/Contents/MacOS/Mac-AutoTyper"
+      - name: Launch app and confirm process stays alive
+        shell: bash
+        run: |
+          set -euo pipefail
+          APP="$RUNNER_TEMP/Mac-AutoTyper.app"
+          EXECUTABLE="$APP/Contents/MacOS/Mac-AutoTyper"
+          open -n "$APP"
+          for _ in {1..20}; do
+            if pgrep -f "^$EXECUTABLE$" >/dev/null; then
+              echo "ARM64 app process started and remained alive."
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "ARM64 app process did not stay alive after launch." >&2
+          exit 1
