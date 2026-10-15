@@ -1,11 +1,10 @@
-# AutoTyper · 夸克浏览器逐字符输入工具
+# AutoTyper · 跨平台夸克浏览器逐字符输入工具
 
-本项目包含独立的 macOS 和 Windows 实现。它可用于夸克中的普通网页文本框，网址没有限定为批改网；当前代码仍只适配夸克浏览器，Chrome、Edge、Safari 等浏览器尚未适配。程序向用户选定的页面、当前获得焦点的可编辑文本框发送逐字符键盘事件；不会粘贴原文、改写网页 DOM、自动打开网站或提交表单。网页编辑器能否接收并保留全部字符，需要在目标页面实际验证。
+Mac-AutoTyper 是一款 macOS（Intel、Apple Silicon）与 Windows x64 桌面逐字符输入工具。它把用户提供的文本转换为连续键盘输入，发送到夸克浏览器当前聚焦的网页编辑框，适合长文本录入。应用不通过剪贴板粘贴原文，不修改网页 DOM，也不会自动打开网站或提交表单。目前仅适配夸克浏览器；具体网站编辑器能否正确接收输入，需在目标页面验证。
 
 ## 适用场景
 
-- 在夸克浏览器的网页编辑框中逐字输入较长文本。
-- 例如，批改网的编辑框禁用复制粘贴时，可以尝试让本应用向已聚焦的编辑框逐字输入。前提是该编辑框接受键盘输入；本项目尚未在批改网实站逐项验收，也不保证所有网页编辑器都能正确接收。
+- 在夸克浏览器的网页编辑框中逐字输入较长文本；例如，批改网编辑框禁用复制粘贴时，可尝试让本应用向已聚焦的编辑框逐字输入。该编辑框需能接收键盘输入；批改网实站尚未逐项验收，也不保证所有网页编辑器都能正确接收。
 - 适用于用户有权填写的普通文本框。开始正式输入前，先在目标页面用短文本检查内容、换行和标点是否正确，并遵守该网站的使用规则。
 
 目前仅适配夸克浏览器；即使其他浏览器或网站上存在可编辑文本框，也不代表本应用已兼容。Chrome、Edge、Safari 及其他浏览器尚未适配。
@@ -14,9 +13,9 @@
 | --- | --- | --- | --- |
 | Mac Intel | `x86_64`，macOS 13+ | Intel Mac 上夸克本地页逐字输入已验收 | [下载 Intel 版](https://github.com/hututu-novice/Mac-AutoTyper/releases/latest/download/Mac-AutoTyper-macOS-Intel-x86_64.zip) |
 | Mac Apple Silicon | `arm64`，macOS 13+ | 已从源码交叉编译、打包并签名；M 系列实机启动和夸克输入未验收，理论上可运行，需 M 系列用户实机确认 | [下载 Apple Silicon 版](https://github.com/hututu-novice/Mac-AutoTyper/releases/latest/download/Mac-AutoTyper-macOS-Apple-Silicon-arm64.zip) |
-| Windows | Windows 10/11 `x64` | 用户确认 Windows 版已在夸克中跑通；本仓库未保存完整的 Windows 实机测试记录 | [下载 Windows x64 版](https://github.com/hututu-novice/Mac-AutoTyper/releases/latest/download/Windows-AutoTyper-win-x64.zip) |
+| Windows | Windows 10/11 `x64` | Windows 版已在夸克中实机跑通 | [下载 Windows x64 版](https://github.com/hututu-novice/Mac-AutoTyper/releases/latest/download/Windows-AutoTyper-win-x64.zip) |
 
-Intel 和 Apple Silicon 使用分别构建的 `.app` 下载包；请根据芯片选择对应版本。Apple Silicon 版目前有 ARM64 编译、打包和签名证据，但没有 M 系列实机验收证据。Windows 的实机跑通状态由用户确认，详细环境和逐项结果尚未归档。所有网页编辑器仍需在目标页面实际检查输入结果。
+Intel 和 Apple Silicon 使用分别构建的 `.app` 下载包；请根据芯片选择对应版本。Apple Silicon 版有 ARM64 编译、打包和签名证据，M 系列实机运行尚未验收。Windows 版已在夸克中实机跑通。网页编辑器的输入效果仍需在目标页面实际检查。
 
 第一次使用请阅读 [中文详细使用教程](docs/使用教程.md)：包含启动位置、逐个按钮说明、本地练习、批改网操作顺序、暂停停止、常见问题和交付文件介绍。
 
@@ -54,7 +53,7 @@ Intel 和 Apple Silicon 使用分别构建的 `.app` 下载包；请根据芯片
 
 ## 当前验收状态
 
-Intel 版 T01–T12 在夸克本地页已有实测记录；Apple Silicon 版已从源码交叉编译并打包，尚无 M 系列实机运行记录；Windows 版由用户确认已在夸克中跑通，详细结果尚未归档。测试边界见 [测试结果](docs/TEST-RESULTS.md)。
+Intel 版 T01–T12 在夸克本地页已有实测记录；Apple Silicon 版已从源码交叉编译并打包，尚无 M 系列实机运行记录；Windows 版已在夸克中实机跑通。测试边界见 [测试结果](docs/TEST-RESULTS.md)。
 
 Windows 版源码与构建入口位于 `windows/`。`./windows/build.sh` 需要 Zig 0.17.0，生成 `dist/windows/Windows-AutoTyper.exe`；打包和安装方法见 [Windows 说明](windows/README-Windows.txt)。目前代码只适配夸克；其他浏览器和具体网站编辑器仍需各自验证。
 
